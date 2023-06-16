@@ -53,13 +53,14 @@ public class Goal {
 		this.currentAmount = goalData.getCurrentAmount();
 	}
 
-	public Goal(long id, 
-				String name, 
-				String description, 
-				String imagePath, 
-				LocalDate targetDate,
-				double targetAmount, 
-				double currentAmount
+	public Goal(
+			long id, 
+			String name, 
+			String description, 
+			String imagePath, 
+			LocalDate targetDate,
+			double targetAmount, 
+			double currentAmount
 	) {
 		super();
 		this.id = id;
