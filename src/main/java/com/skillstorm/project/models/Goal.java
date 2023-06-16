@@ -42,6 +42,16 @@ public class Goal {
 	public Goal() {
 		super();
 	}
+	
+	public Goal(GoalDto goalData) {
+		this.id = goalData.getId();
+		this.name = goalData.getName();
+		this.description = goalData.getDescription();
+		this.imagePath = goalData.getImagePath();
+		this.targetDate = goalData.getTargetDate();
+		this.targetAmount = goalData.getTargetAmount();
+		this.currentAmount = goalData.getCurrentAmount();
+	}
 
 	public Goal(long id, 
 				String name, 

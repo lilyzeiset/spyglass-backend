@@ -1,5 +1,9 @@
 package com.skillstorm.project.repositories;
 
-public class GoalRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.skillstorm.project.models.Goal;
+
+public interface GoalRepository extends JpaRepository<Goal,	Long>{
 
 }
