@@ -32,6 +32,12 @@ public class Goal {
 	@Column
 	private LocalDate targetDate;
 	
+	@Column
+	private double depositAmount;
+	
+	@Column
+	private int depositFrequency;
+	
 	@Positive
 	@Column
 	private double targetAmount;

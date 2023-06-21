@@ -7,11 +7,15 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.skillstorm.project.dtos.UserDto;
-import com.skillstorm.project.models.User;
+import com.skillstorm.project.models.AppUser;
 import com.skillstorm.project.repositories.UserRepository;
 
+@Service
+@Transactional
 public class UserService {
 	
 	@Autowired
@@ -20,23 +24,25 @@ public class UserService {
 	public List<UserDto> getAllUsers() {
 		return userRepository.findAll()
 				.stream()
-				.map(User::toDto)
+				.map(AppUser::toDto)
 				.collect(Collectors.toList());
 	}
 
 	public UserDto getUserById(long id) {
-		User user = userRepository.findById(id)
+		AppUser user = userRepository.findById(id)
 				.orElseThrow(() -> new NoSuchElementException());
 		return user.toDto();
 	}
 
 	public UserDto createUser(@Valid UserDto userData) {
-		User user = new User(userData);
+		System.out.println(userData.getEmail());
+		AppUser user = new AppUser(userData);
+		System.out.println(user.getEmail());
 		return userRepository.save(user).toDto();
 	}
 
 	public UserDto updateUser(long id, @Valid UserDto userData) {
-		User user = new User(userData);
+		AppUser user = new AppUser(userData);
 		user.setId(id);
 		return userRepository.save(user).toDto();
 	}

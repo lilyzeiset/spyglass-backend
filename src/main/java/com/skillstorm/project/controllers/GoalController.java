@@ -53,6 +53,4 @@ public class GoalController {
 	public void deleteGoal(@PathVariable long id) {
 		goalService.deleteGoal(id);
 	}
-
-	
 }

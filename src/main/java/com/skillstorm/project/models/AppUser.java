@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.skillstorm.project.dtos.UserDto;
 
 @Entity
-public class User implements UserDetails {
+public class AppUser implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,11 @@ public class User implements UserDetails {
 	@Column
 	private String password;
 	
-	public User() {
+	public AppUser() {
 		super();
 	}
 
-	public User(
+	public AppUser(
 			long id, 
 			@NotBlank String name, 
 			@NotBlank @Email String email, 
@@ -54,7 +54,7 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 	
-	public User(UserDto userData) {
+	public AppUser(UserDto userData) {
 		super();
 		this.id = userData.getId();
 		this.name = userData.getName();
