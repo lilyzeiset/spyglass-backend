@@ -7,17 +7,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.skillstorm.project.dtos.GoalDto;
+import com.skillstorm.project.services.UserService;
 
 @Entity
 public class Goal {
+	
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private long id;
+
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private AppUser user;
+	
+	@Column
+	private String userId;
 	
 	@NotBlank
 	@Column
@@ -32,18 +45,13 @@ public class Goal {
 	@Column
 	private LocalDate targetDate;
 	
-	@Column
-	private double depositAmount;
-	
-	@Column
-	private int depositFrequency;
-	
 	@Positive
 	@Column
 	private double targetAmount;
 	
 	@Column
 	private double currentAmount;
+	
 
 	public Goal() {
 		super();
@@ -51,6 +59,7 @@ public class Goal {
 	
 	public Goal(GoalDto goalData) {
 		this.id = goalData.getId();
+//		this.user = new AppUser(userService.getUserById(goalData.getUserId()));
 		this.name = goalData.getName();
 		this.description = goalData.getDescription();
 		this.imagePath = goalData.getImagePath();
@@ -61,6 +70,7 @@ public class Goal {
 
 	public Goal(
 			long id, 
+			String userId,
 			String name, 
 			String description, 
 			String imagePath, 
@@ -70,6 +80,7 @@ public class Goal {
 	) {
 		super();
 		this.id = id;
+		this.userId = userId;
 		this.name = name;
 		this.description = description;
 		this.imagePath = imagePath;
@@ -81,6 +92,7 @@ public class Goal {
 	public GoalDto toDto() {
 		return new GoalDto(
 				this.id,
+				this.userId,
 				this.name,
 				this.description,
 				this.imagePath,
@@ -97,6 +109,23 @@ public class Goal {
 	public void setId(long id) {
 		this.id = id;
 	}
+
+//	public AppUser getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(AppUser user) {
+//		this.user = user;
+//	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 
 	public String getName() {
 		return name;

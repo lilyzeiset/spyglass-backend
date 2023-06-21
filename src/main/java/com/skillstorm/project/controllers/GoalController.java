@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,21 +24,37 @@ import com.skillstorm.project.services.GoalService;
 
 @RestController
 @RequestMapping("/goal")
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
 public class GoalController {
 	
 	@Autowired
 	private GoalService goalService;
 	
 	@GetMapping
+	public List<GoalDto> getGoals(@AuthenticationPrincipal OAuth2User user){
+		String userId = (String) user.getAttributes().get("sub");
+		System.out.println("getting by user...");
+		System.out.println(userId);
+		return goalService.getAllGoalsByUserId(userId);
+	}
+	
+	@GetMapping("/all")
 	public List<GoalDto> getAllGoals(){
+		System.out.println("getting all goals...");
 		return goalService.getAllGoals();
 	}
 	
+	/*
 	@GetMapping("/{id}")
 	public GoalDto getGoalById(@PathVariable long id) {
 		return goalService.getGoalById(id);
 	}
+	
+	@GetMapping("/user/{userId}")
+	public List<GoalDto> getAllGoalsByUserId(@PathVariable long userId) {
+		return goalService.getAllGoalsByUserId(userId);
+	}
+	*/
 	
 	@PostMapping
 	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData) {

@@ -35,9 +35,7 @@ public class UserService {
 	}
 
 	public UserDto createUser(@Valid UserDto userData) {
-		System.out.println(userData.getEmail());
 		AppUser user = new AppUser(userData);
-		System.out.println(user.getEmail());
 		return userRepository.save(user).toDto();
 	}
 

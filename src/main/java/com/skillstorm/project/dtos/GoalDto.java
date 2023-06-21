@@ -8,6 +8,7 @@ import javax.validation.constraints.Positive;
 public class GoalDto {
 
 	private long id;
+	private String userId;
 	@NotBlank private String name;
 	private String description;
 	private String imagePath;
@@ -20,6 +21,7 @@ public class GoalDto {
 	}
 
 	public GoalDto(long id, 
+			String userId,
 			String name, 
 			String description, 
 			String imagePath, 
@@ -29,6 +31,7 @@ public class GoalDto {
 	) {
 		super();
 		this.id = id;
+		this.userId = userId;
 		this.name = name;
 		this.description = description;
 		this.imagePath = imagePath;
@@ -43,6 +46,14 @@ public class GoalDto {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {
