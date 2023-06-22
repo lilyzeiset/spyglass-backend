@@ -33,33 +33,17 @@ public class GoalController {
 	@GetMapping
 	public List<GoalDto> getGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
-		System.out.println("getting goals by user...");
-		System.out.println(userId);
 		return goalService.getAllGoalsByUserId(userId);
 	}
 	
 	@GetMapping("/all")
 	public List<GoalDto> getAllGoals(){
-		System.out.println("getting all goals...");
 		return goalService.getAllGoals();
 	}
-	
-	/*
-	@GetMapping("/{id}")
-	public GoalDto getGoalById(@PathVariable long id) {
-		return goalService.getGoalById(id);
-	}
-	
-	@GetMapping("/user/{userId}")
-	public List<GoalDto> getAllGoalsByUserId(@PathVariable long userId) {
-		return goalService.getAllGoalsByUserId(userId);
-	}
-	*/
 	
 	@PostMapping
 	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData, @AuthenticationPrincipal OAuth2User user) {
 		String userId = (String) user.getAttributes().get("sub");
-		System.out.println("creating goal for user: "+userId);
 		goalData.setUserId(userId);
 		GoalDto createdGoal = goalService.createGoal(goalData);
 		return new ResponseEntity<>(createdGoal, HttpStatus.CREATED);

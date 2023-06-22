@@ -7,15 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.skillstorm.project.dtos.GoalDto;
-import com.skillstorm.project.services.UserService;
 
 @Entity
 public class Goal {
@@ -24,10 +20,6 @@ public class Goal {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private long id;
-
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private AppUser user;
 	
 	@Column
 	private String userId;
@@ -109,14 +101,6 @@ public class Goal {
 	public void setId(long id) {
 		this.id = id;
 	}
-
-//	public AppUser getUser() {
-//		return user;
-//	}
-//
-//	public void setUser(AppUser user) {
-//		this.user = user;
-//	}
 
 	public String getUserId() {
 		return userId;
