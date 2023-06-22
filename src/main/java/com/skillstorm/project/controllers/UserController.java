@@ -16,7 +16,7 @@ public class UserController {
 	
 	@GetMapping("/signin")
 	public RedirectView redirectView() {
-		RedirectView redirectView = new RedirectView("http://localhost:5173");
+		RedirectView redirectView = new RedirectView("http://localhost:5173/goals");
 		return redirectView;
 	}
 	

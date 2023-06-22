@@ -2,6 +2,8 @@ package com.skillstorm.project.config;
 
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,7 +23,12 @@ public class SecurityConfig {
 			.anyRequest().authenticated()
 			.and()
 			.csrf().disable()
-			.oauth2Login();
+			.oauth2Login()
+			.and()
+			.logout(logout -> logout.permitAll()
+	                .logoutSuccessHandler((request, response, authentication) -> {
+	                    response.setStatus(HttpServletResponse.SC_OK);
+	                }));
 		
 		http.cors().configurationSource(request -> {
 			CorsConfiguration corsConfig = new CorsConfiguration();
