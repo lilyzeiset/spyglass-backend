@@ -48,7 +48,9 @@ public class GoalService {
 	}
 
 	public GoalDto createGoal(@Valid GoalDto goalData) {
+		System.out.println("*** "+goalData.getUserId());
 		Goal goal = new Goal(goalData);
+		System.out.println("*** "+goal.getUserId());
 //		Optional<AppUser> user = userRepository.findById(goalData.getUserId());
 //		if (user.isPresent()) {
 //			goal.setUser(user.get());

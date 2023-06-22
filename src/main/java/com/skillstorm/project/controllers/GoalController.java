@@ -33,7 +33,7 @@ public class GoalController {
 	@GetMapping
 	public List<GoalDto> getGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
-		System.out.println("getting by user...");
+		System.out.println("getting goals by user...");
 		System.out.println(userId);
 		return goalService.getAllGoalsByUserId(userId);
 	}
@@ -57,7 +57,10 @@ public class GoalController {
 	*/
 	
 	@PostMapping
-	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData) {
+	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData, @AuthenticationPrincipal OAuth2User user) {
+		String userId = (String) user.getAttributes().get("sub");
+		System.out.println("creating goal for user: "+userId);
+		goalData.setUserId(userId);
 		GoalDto createdGoal = goalService.createGoal(goalData);
 		return new ResponseEntity<>(createdGoal, HttpStatus.CREATED);
 	}

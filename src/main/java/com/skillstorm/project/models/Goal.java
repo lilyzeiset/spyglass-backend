@@ -59,7 +59,7 @@ public class Goal {
 	
 	public Goal(GoalDto goalData) {
 		this.id = goalData.getId();
-//		this.user = new AppUser(userService.getUserById(goalData.getUserId()));
+		this.userId = goalData.getUserId();
 		this.name = goalData.getName();
 		this.description = goalData.getDescription();
 		this.imagePath = goalData.getImagePath();
