@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: 5000
   
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/spyglass
+    url: jdbc:postgresql://lily-spyglass-db.cluster-c4eqo06kg56i.us-east-1.rds.amazonaws.com:5432/spyglass
     username: postgres
-    password: pgAdmin
+    password: password
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
