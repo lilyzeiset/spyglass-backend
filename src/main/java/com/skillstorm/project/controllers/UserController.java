@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@CrossOrigin(allowCredentials = "true", originPatterns = {"http://localhost:8080","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*"})
+@CrossOrigin(allowCredentials = "true", originPatterns = {"http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
 public class UserController {
 	
 	@Value("${frontend-url}")
