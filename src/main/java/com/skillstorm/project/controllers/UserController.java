@@ -20,6 +20,7 @@ public class UserController {
 	
 	@GetMapping("/signin")
 	public RedirectView redirectView() {
+		System.out.println(frontendUrl);
 		RedirectView redirectView = new RedirectView(frontendUrl+"/goals");
 		return redirectView;
 	}
