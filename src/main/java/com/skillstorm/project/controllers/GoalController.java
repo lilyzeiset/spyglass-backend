@@ -24,7 +24,7 @@ import com.skillstorm.project.services.GoalService;
 
 @RestController
 @RequestMapping("/goal")
-@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:8080,http://lily-spyglass.s3-website-us-east-1.amazonaws.com")
+@CrossOrigin(allowCredentials = "true", origins = {"http://localhost:8080","http://lily-spyglass.s3-website-us-east-1.amazonaws.com"})
 public class GoalController {
 	
 	@Autowired
