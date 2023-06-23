@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spyglass
+    username: postgres
+    password: pgAdmin
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 137424696014-062cnpkc3rkfsihr5fiauaf637nf5l3r.apps.googleusercontent.com
+            client-secret: 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

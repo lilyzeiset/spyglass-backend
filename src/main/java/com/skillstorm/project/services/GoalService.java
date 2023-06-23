@@ -47,6 +47,9 @@ public class GoalService {
 	}
 
 	public GoalDto updateGoal(long id, @Valid GoalDto goalData) {
+		if (goalData.getCurrentAmount() >= goalData.getTargetAmount()) {
+			goalData.setCurrentAmount(goalData.getTargetAmount());
+		}
 		Goal goal = new Goal(goalData);
 		goal.setId(id);
 		return goalRepository.save(goal).toDto();
