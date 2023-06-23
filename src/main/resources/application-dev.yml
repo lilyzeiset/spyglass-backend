@@ -20,3 +20,5 @@ spring:
           google:
             client-id: 137424696014-062cnpkc3rkfsihr5fiauaf637nf5l3r.apps.googleusercontent.com
             client-secret: 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
+            
+frontend-url: http://localhost:5173

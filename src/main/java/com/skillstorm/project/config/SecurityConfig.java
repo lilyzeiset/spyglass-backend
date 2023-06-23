@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +16,9 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig {
+
+	@Value("${frontend-url}")
+	private String frontendUrl;
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +36,7 @@ public class SecurityConfig {
 		
 		http.cors().configurationSource(request -> {
 			CorsConfiguration corsConfig = new CorsConfiguration();
-			corsConfig.addAllowedOrigin("http://localhost:5173");
+			corsConfig.addAllowedOrigin(frontendUrl);
 			corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 			corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 			corsConfig.setAllowCredentials(true);
