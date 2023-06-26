@@ -1,5 +1,6 @@
 package com.skillstorm.project.controllers;
 
+import java.io.File;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.skillstorm.project.dtos.GoalDto;
 import com.skillstorm.project.services.GoalService;
@@ -36,10 +39,38 @@ public class GoalController {
 		return goalService.getAllGoalsByUserId(userId);
 	}
 	
+	@GetMapping("/active")
+	public List<GoalDto> getActiveGoals(@AuthenticationPrincipal OAuth2User user){
+		String userId = (String) user.getAttributes().get("sub");
+		return goalService.getActiveGoalsByUserId(userId);
+	}
+	
+	@GetMapping("/inactive")
+	public List<GoalDto> getInactiveGoals(@AuthenticationPrincipal OAuth2User user){
+		String userId = (String) user.getAttributes().get("sub");
+		return goalService.getInactiveGoalsByUserId(userId);
+	}
+	
 	@GetMapping("/all")
 	public List<GoalDto> getAllGoals(){
 		return goalService.getAllGoals();
 	}
+	
+	@GetMapping("/{id}")
+	public GoalDto getGoalById(@PathVariable long id) {
+		return goalService.getGoalById(id);
+	}
+	
+	@PostMapping(path = "/{id}/upload", consumes = "multipart/form-data")
+	  public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image, @PathVariable long id) {
+		if (!image.isEmpty()) {
+		      System.out.println("Received image");
+	      //upload to s3, update goal.imageUrl
+	      return ResponseEntity.status(HttpStatus.OK).body("Image uploaded successfully!");
+	    }
+
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No image file provided.");
+	  }
 	
 	@PostMapping
 	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData, @AuthenticationPrincipal OAuth2User user) {

@@ -40,6 +40,20 @@ public class GoalService {
 				.map(Goal::toDto)
 				.collect(Collectors.toList());
 	}
+	
+	public List<GoalDto> getActiveGoalsByUserId(String userId) {
+		return goalRepository.findActiveGoalsByUserId(userId)
+				.stream()
+				.map(Goal::toDto)
+				.collect(Collectors.toList());
+	}
+	
+	public List<GoalDto> getInactiveGoalsByUserId(String userId) {
+		return goalRepository.findInactiveGoalsByUserId(userId)
+				.stream()
+				.map(Goal::toDto)
+				.collect(Collectors.toList());
+	}
 
 	public GoalDto createGoal(@Valid GoalDto goalData) {
 		Goal goal = new Goal(goalData);
