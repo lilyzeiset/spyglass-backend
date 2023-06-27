@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://lily-spyglass.cluster-c4eqo06kg56i.us-east-1.rds.amazonaws.com:5432/postgres
-    username: postgres
-    password: password
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD_PROD}
   jpa:
     show-sql: false
     hibernate:
@@ -18,7 +18,11 @@ spring:
       client:
         registration:
           google:
-            client-id: 137424696014-062cnpkc3rkfsihr5fiauaf637nf5l3r.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             
-frontend-url: http://lily-spyglass.s3-website-us-east-1.amazonaws.com
+#frontend-url: http://lily-spyglass.s3-website-us-east-1.amazonaws.com
+frontend-url: https://d1ulkr0tra4x6n.cloudfront.net
+s3-bucket-name: lily-spyglass-images
+aws-access-key: ${IMAGE_BUCKET_ACCESS_KEY}
+aws-secret-key: ${IMAGE_BUCKET_SECRET_KEY}
