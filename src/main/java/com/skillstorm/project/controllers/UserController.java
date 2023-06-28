@@ -26,7 +26,7 @@ public class UserController {
 	public RedirectView redirectView() {
 		log.info("Frontend URL: " + frontendUrl);
 		log.info("Signing in with Google");
-		RedirectView redirectView = new RedirectView(frontendUrl+"/goals");
+		RedirectView redirectView = new RedirectView(frontendUrl/*+"/goals"*/);
 		return redirectView;
 	}
 	
