@@ -20,10 +20,13 @@ public class SecurityConfig {
 	@Value("${frontend-url}")
 	private String frontendUrl;
 	
+	@Value("${mode}")
+	private String mode;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.mvcMatchers("/goal/all").permitAll()
+			.mvcMatchers("/goal/all").access(mode.equals("dev") ? "permitAll()" : "denyAll()")
 			.anyRequest().authenticated()
 			.and()
 			.csrf().disable()
