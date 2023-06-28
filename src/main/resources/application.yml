@@ -21,8 +21,8 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             
-#frontend-url: http://lily-spyglass.s3-website-us-east-1.amazonaws.com
-frontend-url: http://d1ulkr0tra4x6n.cloudfront.net
+frontend-url: http://lily-spyglass.s3-website-us-east-1.amazonaws.com
+#frontend-url: http://d1ulkr0tra4x6n.cloudfront.net
 mode: prod
 s3-bucket-name: lily-spyglass-images
 aws-access-key: ${IMAGE_BUCKET_ACCESS_KEY}
