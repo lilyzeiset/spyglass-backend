@@ -41,7 +41,7 @@ public class SecurityConfig {
 			CorsConfiguration corsConfig = new CorsConfiguration();
 			corsConfig.addAllowedOrigin(frontendUrl);
 			corsConfig.addAllowedOrigin("http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com");
-			corsConfig.addAllowedOrigin("https://accounts.google.com/o/oauth2/v2/auth");
+			corsConfig.addAllowedOrigin("http://lily-spyglass.s3-website-us-east-1.amazonaws.com");
 			corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 			corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 			corsConfig.setAllowCredentials(true);
