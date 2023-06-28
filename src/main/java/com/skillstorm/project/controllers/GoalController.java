@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -38,9 +40,11 @@ import com.skillstorm.project.services.GoalService;
 
 @RestController
 @RequestMapping("/goal")
-@CrossOrigin(allowCredentials = "true", originPatterns = {"http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
+@CrossOrigin(allowCredentials = "true", originPatterns = {"http://d1ulkr0tra4x6n.cloudfront.net","http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
 public class GoalController {
 	
+	private static final Logger log = LoggerFactory.getLogger(GoalController.class);
+
 	@Autowired
 	private GoalService goalService;
 
@@ -56,28 +60,33 @@ public class GoalController {
 	@GetMapping
 	public List<GoalDto> getGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
+		log.info("Getting all goals for user: " + userId);
 		return goalService.getAllGoalsByUserId(userId);
 	}
 	
 	@GetMapping("/active")
 	public List<GoalDto> getActiveGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
+		log.info("Getting active goals for user: " + userId);
 		return goalService.getActiveGoalsByUserId(userId);
 	}
 	
 	@GetMapping("/inactive")
 	public List<GoalDto> getInactiveGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
+		log.info("Getting inactive goals for user: " + userId);
 		return goalService.getInactiveGoalsByUserId(userId);
 	}
 	
 	@GetMapping("/all")
 	public List<GoalDto> getAllGoals(){
+		log.info("Getting ALL goals for ALL users");
 		return goalService.getAllGoals();
 	}
 	
 	@GetMapping("/{id}")
 	public GoalDto getGoalById(@PathVariable long id) {
+		log.info("Getting goal with id: " + id);
 		return goalService.getGoalById(id);
 	}
 	
@@ -87,10 +96,11 @@ public class GoalController {
 			  @PathVariable long id, 
 			  @AuthenticationPrincipal OAuth2User user) 
 	{
-		
+		log.info("Uploading image for goal with id: " + id);
 		if (!image.isEmpty()) {
 			
 			//Get existing S3 image path from DB OR generate a random one
+			log.info("upload: determining S3 path");
 			GoalDto goalData = goalService.getGoalById(id);
 			String existingImagePath = goalData.getImagePath();
 			String s3path;
@@ -103,8 +113,10 @@ public class GoalController {
 			} else {
 				s3path = existingImagePath;
 			}
+			log.info("upload: S3 path is: " + s3path);
 			
 			//Convert MultipartFile to InputStream
+			log.info("upload: converting MultipartFile to InputStream");
 			InputStream imageInputStream;
 			try {
 				imageInputStream = image.getInputStream();
@@ -113,10 +125,12 @@ public class GoalController {
 			}
 			
 			//Create object metadata
+			log.info("upload: creating metadata");
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentLength(image.getSize());
 			
 			//S3 setup
+			log.info("upload: setting up S3 client");
 			AWSCredentials credentials = new BasicAWSCredentials(
 					  awsAccessKey, 
 					  awsSecretKey
@@ -128,14 +142,17 @@ public class GoalController {
 					  .build();
 			
 			//Upload object to S3
+			log.info("upload: uploading object to bucket");
 			s3client.putObject(
 					new PutObjectRequest(
 						bucketName, 
 						s3path,
 						imageInputStream, 
 						metadata));
+			log.info("upload: upload complete");
 			
 			//Update imagePath
+			log.info("upload: setting image path");
 			goalData.setImagePath(s3path);
 			goalService.updateGoal(id, goalData);
 			
@@ -147,6 +164,7 @@ public class GoalController {
 	
 	@PostMapping
 	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData, @AuthenticationPrincipal OAuth2User user) {
+		log.info("Creating goal");
 		String userId = (String) user.getAttributes().get("sub");
 		goalData.setUserId(userId);
 		GoalDto createdGoal = goalService.createGoal(goalData);
@@ -155,11 +173,13 @@ public class GoalController {
 	
 	@PutMapping("/{id}")
 	public GoalDto updateGoal(@PathVariable long id, @Valid @RequestBody GoalDto goalData) {
+		log.info("Updating goal with id: " + id);
 		return goalService.updateGoal(id, goalData);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void deleteGoal(@PathVariable long id) {
+		log.info("Deleting goal with id: " + id);
 		goalService.deleteGoal(id);
 	}
 }
