@@ -3,7 +3,7 @@ server:
   servlet:
     session:
       cookie:
-        domain: 
+        domain: com
   
 spring:
   datasource:
