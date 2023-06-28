@@ -22,6 +22,9 @@ public class UserController {
 	@Value("${frontend-url}")
 	private String frontendUrl;
 	
+	/**
+	 * Sends user to Google consent screen and then redirects them back to frontend
+	 */
 	@GetMapping("/signin")
 	public RedirectView redirectView() {
 		log.info("Frontend URL: " + frontendUrl);
@@ -30,6 +33,10 @@ public class UserController {
 		return redirectView;
 	}
 	
+	/**
+	 * Returns info about the logged-in user
+	 * (name, email, userId (sub), profile picture, etc.) 
+	 */
 	@GetMapping("/userinfo")
 	@ResponseBody
 	public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user) {

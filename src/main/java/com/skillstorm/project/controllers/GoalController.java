@@ -57,6 +57,9 @@ public class GoalController {
 	@Value("${aws-secret-key}")
 	String awsSecretKey;
 	
+	/**
+	 * Gets all goals for the logged-in user
+	 */
 	@GetMapping
 	public List<GoalDto> getGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
@@ -64,6 +67,9 @@ public class GoalController {
 		return goalService.getAllGoalsByUserId(userId);
 	}
 	
+	/**
+	 * Gets active goals for the logged-in user
+	 */
 	@GetMapping("/active")
 	public List<GoalDto> getActiveGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
@@ -71,6 +77,10 @@ public class GoalController {
 		return goalService.getActiveGoalsByUserId(userId);
 	}
 	
+	/**
+	 * Gets inactive goals for the logged-in user
+	 * inactive: targetAmount reached or targetDate passed
+	 */
 	@GetMapping("/inactive")
 	public List<GoalDto> getInactiveGoals(@AuthenticationPrincipal OAuth2User user){
 		String userId = (String) user.getAttributes().get("sub");
@@ -78,18 +88,29 @@ public class GoalController {
 		return goalService.getInactiveGoalsByUserId(userId);
 	}
 	
+	/**
+	 * Gets ALL goals for ALL users
+	 * only available in dev mode (see SecurityConfig)
+	 */
 	@GetMapping("/all")
 	public List<GoalDto> getAllGoals(){
 		log.info("Getting ALL goals for ALL users");
 		return goalService.getAllGoals();
 	}
 	
+	/**
+	 * Gets a particular goal by its ID
+	 */
 	@GetMapping("/{id}")
 	public GoalDto getGoalById(@PathVariable long id) {
 		log.info("Getting goal with id: " + id);
 		return goalService.getGoalById(id);
 	}
 	
+	/**
+	 * Receives an image, uploads it to S3, 
+	 * and updates imagePath of goal with the given ID
+	 */
 	@PostMapping(path = "/{id}/upload", consumes = "multipart/form-data")
 	public ResponseEntity<String> uploadImage(
 			  @RequestParam("image") MultipartFile image, 
@@ -162,6 +183,9 @@ public class GoalController {
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"No image file provided.\"}");
 	  }
 	
+	/**
+	 * Creates a new goal and associates it with the logged-in user
+	 */
 	@PostMapping
 	public ResponseEntity<GoalDto> createGoal(@Valid @RequestBody GoalDto goalData, @AuthenticationPrincipal OAuth2User user) {
 		log.info("Creating goal");
@@ -171,12 +195,18 @@ public class GoalController {
 		return new ResponseEntity<>(createdGoal, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * Updates goal with given ID
+	 */
 	@PutMapping("/{id}")
 	public GoalDto updateGoal(@PathVariable long id, @Valid @RequestBody GoalDto goalData) {
 		log.info("Updating goal with id: " + id);
 		return goalService.updateGoal(id, goalData);
 	}
 	
+	/**
+	 * Deletes goal with given ID
+	 */
 	@DeleteMapping("/{id}")
 	public void deleteGoal(@PathVariable long id) {
 		log.info("Deleting goal with id: " + id);
