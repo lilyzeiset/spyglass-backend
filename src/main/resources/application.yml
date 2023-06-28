@@ -1,6 +1,10 @@
 server:
   port: 5000
   
+logging:
+  level:
+    root: TRACE
+  
 spring:
   datasource:
     url: jdbc:postgresql://lily-spyglass.cluster-c4eqo06kg56i.us-east-1.rds.amazonaws.com:5432/postgres
