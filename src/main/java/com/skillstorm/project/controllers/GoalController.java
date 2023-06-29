@@ -44,7 +44,7 @@ import io.opentelemetry.api.trace.Tracer;
 
 @RestController
 @RequestMapping("/goal")
-@CrossOrigin(allowCredentials = "true", originPatterns = {"http://d1ulkr0tra4x6n.cloudfront.net","http://localhost:8089","http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
+@CrossOrigin(allowCredentials = "true", originPatterns = {"http://d1ulkr0tra4x6n.cloudfront.net","http://localhost:8089","http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com"})
 public class GoalController {
 	
 	private static final Logger log = LoggerFactory.getLogger(GoalController.class);
