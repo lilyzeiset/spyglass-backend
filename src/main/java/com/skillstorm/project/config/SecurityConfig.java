@@ -59,6 +59,8 @@ public class SecurityConfig {
 			
 			return corsConfig;
 		});
+		
+		
 
 		return http.build();
 	}
