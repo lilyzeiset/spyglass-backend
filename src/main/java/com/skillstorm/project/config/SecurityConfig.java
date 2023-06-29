@@ -39,11 +39,16 @@ public class SecurityConfig {
 		
 		http.cors().configurationSource(request -> {
 			CorsConfiguration corsConfig = new CorsConfiguration();
-			corsConfig.addAllowedOrigin(frontendUrl);
-			corsConfig.addAllowedOrigin("http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com");
-			corsConfig.addAllowedOrigin("http://lily-spyglass.s3-website-us-east-1.amazonaws.com");
-			corsConfig.addAllowedOrigin("http://vdpwuzgpcr.us-east-1.awsapprunner.com");
-			corsConfig.addAllowedOrigin("http://localhost:8089");
+			corsConfig.setAllowedOrigins(Arrays.asList(
+					frontendUrl, 
+					"http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com",
+					"http://lily-spyglass.s3-website-us-east-1.amazonaws.com",
+					"http://vdpwuzgpcr.us-east-1.awsapprunner.com"
+					));
+//			corsConfig.addAllowedOrigin("http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com");
+//			corsConfig.addAllowedOrigin("http://lily-spyglass.s3-website-us-east-1.amazonaws.com");
+//			corsConfig.addAllowedOrigin("http://vdpwuzgpcr.us-east-1.awsapprunner.com");
+//			corsConfig.addAllowedOrigin("http://localhost:8089");
 			corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 			corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 			corsConfig.setAllowCredentials(true);
