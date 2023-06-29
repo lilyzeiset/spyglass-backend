@@ -38,9 +38,13 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.skillstorm.project.dtos.GoalDto;
 import com.skillstorm.project.services.GoalService;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+
 @RestController
 @RequestMapping("/goal")
-@CrossOrigin(allowCredentials = "true", originPatterns = {"http://d1ulkr0tra4x6n.cloudfront.net","http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
+@CrossOrigin(allowCredentials = "true", originPatterns = {"http://d1ulkr0tra4x6n.cloudfront.net","http://localhost:8089","http://localhost:5173","http://lily-spyglass.s3-website-us-east-1.amazonaws.com*","http://lily-spyglass-env.eba-he3agp52.us-east-1.elasticbeanstalk.com*"})
 public class GoalController {
 	
 	private static final Logger log = LoggerFactory.getLogger(GoalController.class);
@@ -117,10 +121,12 @@ public class GoalController {
 			  @PathVariable long id, 
 			  @AuthenticationPrincipal OAuth2User user) 
 	{
+		Tracer tracer = GlobalOpenTelemetry.getTracer("GoalController.uploadImage");
 		log.info("Uploading image for goal with id: " + id);
 		if (!image.isEmpty()) {
 			
 			//Get existing S3 image path from DB OR generate a random one
+			Span span1 = tracer.spanBuilder("determine path").startSpan();
 			log.info("upload: determining S3 path");
 			GoalDto goalData = goalService.getGoalById(id);
 			String existingImagePath = goalData.getImagePath();
@@ -135,8 +141,11 @@ public class GoalController {
 				s3path = existingImagePath;
 			}
 			log.info("upload: S3 path is: " + s3path);
+			span1.end();
+			
 			
 			//Convert MultipartFile to InputStream
+			Span span2 = tracer.spanBuilder("convert MultipartFile to InputStream").startSpan();
 			log.info("upload: converting MultipartFile to InputStream");
 			InputStream imageInputStream;
 			try {
@@ -144,14 +153,15 @@ public class GoalController {
 			} catch (IOException e) {
 			    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Couldn't get inputStream.\"}");
 			}
+			span2.end();
 			
-			//Create object metadata
-			log.info("upload: creating metadata");
+			
+			//S3 setup
+			Span span3 = tracer.spanBuilder("setup S3 client").startSpan();
+			log.info("upload: setting up S3 client");
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentLength(image.getSize());
 			
-			//S3 setup
-			log.info("upload: setting up S3 client");
 			AWSCredentials credentials = new BasicAWSCredentials(
 					  awsAccessKey, 
 					  awsSecretKey
@@ -161,8 +171,11 @@ public class GoalController {
 					  .withCredentials(new AWSStaticCredentialsProvider(credentials))
 					  .withRegion(Regions.US_EAST_1)
 					  .build();
+			span3.end();
+			
 			
 			//Upload object to S3
+			Span span4 = tracer.spanBuilder("s3client.putObject").startSpan();
 			log.info("upload: uploading object to bucket");
 			s3client.putObject(
 					new PutObjectRequest(
@@ -171,11 +184,15 @@ public class GoalController {
 						imageInputStream, 
 						metadata));
 			log.info("upload: upload complete");
+			span4.end();
+			
 			
 			//Update imagePath
+			Span span5 = tracer.spanBuilder("set imagePath").startSpan();
 			log.info("upload: setting image path");
 			goalData.setImagePath(s3path);
 			goalService.updateGoal(id, goalData);
+			span5.end();
 			
 			return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Image uploaded successfully!\"}");
 	    }

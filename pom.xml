@@ -64,6 +64,12 @@
 		    <artifactId>aws-java-sdk-s3</artifactId>
 		    <version>1.12.495</version>
 		</dependency>
+		<!-- https://docs.honeycomb.io/getting-data-in/opentelemetry/java-distro -->
+		<dependency>
+		  <groupId>io.honeycomb</groupId>
+		  <artifactId>honeycomb-opentelemetry-sdk</artifactId>
+		  <version>1.5.2</version>
+		</dependency>
 
 
 	</dependencies>
